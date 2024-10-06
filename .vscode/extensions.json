@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "1yib.rust-bundle",
+        "tamasfe.even-better-toml",
+        "streetsidesoftware.code-spell-checker",
+        "ms-python.python"
+    ]
+}

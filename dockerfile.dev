@@ -1,0 +1,44 @@
+FROM --platform=linux/amd64 python:3.12.4-bullseye
+SHELL ["/bin/bash", "-c"]
+
+RUN apt update -y && \
+    apt upgrade -y && \
+    apt install -y git curl ffmpeg iputils-ping dnsutils && \
+    apt autoremove -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o installer.sh
+RUN sh installer.sh -y
+
+# rustのパスを通す
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+
+#rustのtargetのパスを変更
+RUN mkdir -p /.rust/target
+ENV CARGO_TARGET_DIR=/.rust/target
+
+# python側の依存関係をインストール
+COPY requirements.txt /pyton-pkg-core/requirements.txt
+WORKDIR /pyton-pkg-core
+
+# uv使わないと遅すぎて人生の無駄遣いを感じる
+RUN pip install uv
+# RUN uv pip install --system  -r requirements.txt 
+
+# RUN pip install -r requirements.txt
+
+# rust側事前ビルド
+# WORKDIR /rust-pkg-core
+# COPY Cargo.toml /rust-pkg-core
+# COPY Cargo.lock /rust-pkg-core
+# COPY src/ /rust-pkg-core/src/
+# COPY src-py/ /rust-pkg-core/src-py/
+
+# RUN cargo build
+
+
+# pycache作成
+# python -m compileall -f ./
+
+WORKDIR /app

@@ -1,0 +1,10 @@
+services:
+    rust-python-pyo3-integration-samples:
+      image: rust-python-pyo3-integration-samples
+      build:
+        context: .
+        dockerfile: dockerfile.dev
+      volumes:
+        - ./:/app
+      platform: linux/amd64
+      tty: true
