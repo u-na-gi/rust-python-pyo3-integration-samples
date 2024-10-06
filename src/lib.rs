@@ -1,6 +1,6 @@
 use pyo3::prelude::*;
 
-pub fn my_module(py: Python<'_>) {
+pub fn my_module(py: Python<'_>)  -> PyResult<()> {
     // Use include_str! to embed the Python file's content at build time
     let py_code = include_str!("/app/src-py/from_rust.py");
 
@@ -17,7 +17,16 @@ pub fn my_module(py: Python<'_>) {
         .unwrap();
 
     println!("Result from Python function: {}", result);
+    Ok(())
 }
+
+pub fn numpy(py: Python<'_>) -> PyResult<()> {
+    let numpy = PyModule::import_bound(py, "numpy").unwrap();
+    let arr = numpy.call_method1("array", (vec![1.0, 2.0, 3.0],)).unwrap();
+    println!("Array from NumPy: {:?}", arr);
+    Ok(())
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -26,8 +35,8 @@ mod tests {
     #[test]
     fn test_try_import() {
         Python::with_gil(|py| {
-            // Importing works when done first, but fails when done afterward
             let _ = my_module(py);
+            let _ = numpy(py);
         });
     }
 }
