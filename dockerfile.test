@@ -1,0 +1,32 @@
+FROM python:3.12.4-bullseye
+
+SHELL ["/bin/bash", "-c"]
+
+RUN apt update -y && \
+    apt upgrade -y 
+
+# rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o installer.sh
+RUN sh installer.sh -y
+
+# rustのパスを通す
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+
+#rustのtargetのパスを変更
+RUN mkdir -p /.rust/target
+ENV CARGO_TARGET_DIR=/.rust/target
+
+
+
+# uv使わないと遅すぎて人生の無駄遣いを感じる
+RUN pip install uv
+
+
+WORKDIR /app
+COPY . .
+
+RUN uv venv
+RUN uv pip install -r requirements.txt 
+
+CMD ["uv", "run", "cargo", "test"]

@@ -37,7 +37,9 @@ After setting up the environment, you can run the tests that demonstrate the int
 To run the tests, use:
 
 ```bash
-cargo test
+uv venv
+uv pip install -r requirements.txt 
+uv run cargo test
 ```
 
 This command will execute the Rust unit tests, which include calls to Python functions embedded in the project. The tests cover scenarios such as:
@@ -51,10 +53,8 @@ This command will execute the Rust unit tests, which include calls to Python fun
 If you are running the environment inside Docker, make sure to use the following command to run tests in the containerized environment:
 
 ```bash
-docker compose exec <container_name> cargo test
+make test
 ```
-
-Replace `<container_name>` with the name of the container running your Rust application.
 
 ## Key Considerations
 
