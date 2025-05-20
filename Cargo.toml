@@ -6,5 +6,5 @@ edition = "2021"
 [dependencies]
 
 [dependencies.pyo3]
-version = "0.21.0"
+version = "0.24.1"
 features = ["auto-initialize"]
