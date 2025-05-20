@@ -14,9 +14,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Build Docker image
-      run: docker build -t rust-python-pyo3-integration-samples -f dockerfile.dev .
-    - name: Run build in container
-      run: docker run --rm -v ${{ github.workspace }}:/app rust-python-pyo3-integration-samples cargo build --verbose
     - name: Run tests in container
-      run: docker run --rm -v ${{ github.workspace }}:/app rust-python-pyo3-integration-samples cargo test --verbose
+      run: make test
